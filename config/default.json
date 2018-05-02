@@ -5,7 +5,7 @@
   "port": 5000,
   "botUserOAuthAccessToken": "xoxb-354423818581-wf2lroHlq6MQF4lf325EbcMf",
   "verificationToken": "zl8nrpn2QaD9z9ej9DnotNJY",
-  "appType": {"wf":"kintai"},
+  "appType": {"wf":"kintai", "slack":"slack"},
   "chatType": {"slack":0, "chatwork":1},
   "logging": {
     "console": {
@@ -29,5 +29,6 @@
   "infoWorkSpace": {
     "slack_botName": "botndt",
     "slack_channel": "testchannel"
-  }
+  },
+  "urlWf":"http://localhost:8080"
 }

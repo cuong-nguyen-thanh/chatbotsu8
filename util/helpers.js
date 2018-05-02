@@ -1,10 +1,20 @@
 var config = require('config');
 var urlExists = require('url-exists');
+var crypto = require('crypto');
 
 exports.mappingUser = mappingUser;
 exports.checkUrl = checkUrl;
 exports.returnFistTimeMsg = returnFistTimeMsg;
 exports.resolveLater = resolveLater;
+exports.genToken = genToken;
+
+function genToken(cryptKey, crpytIv, plainData) {
+    var encipher = crypto.createCipheriv('aes-128-cbc', cryptKey, crpytIv),
+        encrypted = encipher.update(plainData, 'utf8', 'binary');
+    encrypted += encipher.final('binary');
+    var tk = new Buffer(encrypted, 'binary').toString('base64');
+    return tk;
+}
 
 // Create a Promise that resolves after a full turn of the event loop
 // Used since Promise.resolve() will resolve too early
@@ -32,20 +42,33 @@ function checkUrl(url, callback) {
     });
 }
 
-function mappingUser(appReq, userIdApprove) {
+function mappingUser(type, userId) {
     let userIdFinded;
-    switch(appReq) {
+    switch(type) {
         case config.appType.wf:
-            userIdFinded = findUserWf(userIdApprove)
+            userIdFinded = findUserByWfId(userId)
+            break;
+        case config.appType.slack:
+            userIdFinded = findUserBySlackId(userId)
             break;
     }
     return userIdFinded;
 }
 
-function findUserWf(userIdApprove) {
+function findUserByWfId(userId) {
     var arrayUser = config.mappingUser;
     for(var i = 0; i < arrayUser.length; i++) {
-        if(arrayUser[i].wf === userIdApprove) {
+        if(arrayUser[i].wf === userId) {
+            return arrayUser[i];
+        }
+    }
+    return null;
+}
+
+function findUserBySlackId(userId) {
+    var arrayUser = config.mappingUser;
+    for(var i = 0; i < arrayUser.length; i++) {
+        if(arrayUser[i].slack === userId) {
             return arrayUser[i];
         }
     }

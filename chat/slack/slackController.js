@@ -2,6 +2,7 @@ var config = require('config'),
     async = require('async'),
     apiHandle = require('./../../util/apiHandle'),
     helpers = require('./../../util/helpers'),
+    dateFormat = require('dateformat'),
     genMsg = require('./../../util/genMsg');
 
 exports.sendMsgWithAttach = sendMsgWithAttach;
@@ -50,32 +51,49 @@ function actionApprove(payload, respond) {
     .then(() => {
         let msgConfirmation;
         let msgRespond;
-        let isApprove;
+        let action_id;
         if(payload.actions[0].value === 'accept') {
             msgConfirmation = 'You have approved.';
             msgRespond = 'Your request has been approved.';
-            isApprove = true;
+            action_id = "3";
         } else {
             msgConfirmation = 'You have rejected.';
             msgRespond = 'Your request has been rejected.';
-            isApprove = false;
+            action_id = "4";
         } 
 
         // Call api change status WF
-        var json = {"name": "Test"};
-        var url = 'https://botsu89heroku.herokuapp.com/testpost';
-        apiHandle.postApi(json, url, function(err, res, body) {
+        var userApprove = helpers.mappingUser(config.appType.slack, payload.user.id);
+        var today = new Date();
+        var dateFm = dateFormat(today, "yyyymmddHHMM");
+        var plainData = 'API_WORKFLOW_KEY#tenant01#' + dateFm;
+        var token = helpers.genToken('kintai_encrypt01', 'visappworkflow01', plainData);
+        var application_id = payload.callback_id.substring("action_slack_click_approve_id_".length);
+        console.log(application_id);
+        var jsonData = {
+            "action_id":action_id,
+            "application_list":[
+                {
+                "application_id":application_id,
+                "comment":"comment",
+                "update_time":"2018-03-19 12:05:16"
+                }
+            ]
+        };
+        var url = config.urlWf + '/api/ext/applications/status?access_token=' +
+            token +'&employee_external_code=' +
+            userApprove.wf +'&app_id=kintai&tenant_id=tenant01_ext';
+        console.log(jsonData);
+        console.log(url);
+        apiHandle.postApi(jsonData, url, function(err, res, body) {
             if (res && (res.statusCode === 200 || res.statusCode === 201)) {
-                console.log('-----Post OK-----');
                 // Send msg to user approve
                 respond({ text: msgConfirmation });
-
                 // Send msg to user request
                 sendMsg(payload.actions[0].name, msgRespond, function(err){
                     console.log(err);
                 });
             } else {
-                console.log('-----Error-----');
                 console.log(err);
             }
         });

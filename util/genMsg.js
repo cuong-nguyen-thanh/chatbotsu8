@@ -33,7 +33,7 @@ function genMsgNotImgApprove(data, channelId, userRequest) {
           },
           {
               "title": "You want approve?",
-              "callback_id": "action_slack_click_approve",
+              "callback_id": "action_slack_click_approve_id_" + data.application_id,
               "color": "#3AA3E3",
               "attachment_type": "default",
               "actions": [
@@ -102,8 +102,8 @@ function genMsgApprove(data, channelId, userRequest) {
             },
             {
                 "title": "You want approve?",
-                "callback_id": "action_slack_click_approve",
-                "color": "#3AA3E3",
+                "callback_id": "action_slack_click_approve_id_" + data.application_id,
+                "color": "#3AA3E3", 
                 "attachment_type": "default",
                 "actions": [
                     {
@@ -111,7 +111,8 @@ function genMsgApprove(data, channelId, userRequest) {
                         "text": "Accept",
                         "type": "button",
                         "value": "accept",
-                        "style": "primary"
+                        "style": "primary",
+                        "test": "test"
                     },
                     {
                         "name": userRequest.slack,
@@ -119,6 +120,7 @@ function genMsgApprove(data, channelId, userRequest) {
                         "type": "button",
                         "value": "reject",
                         "style": "danger",
+                        "test": "test"
                     }
                 ]
             }

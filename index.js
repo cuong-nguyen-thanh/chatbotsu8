@@ -5,7 +5,7 @@ var express = require('express'),
     helpers = require('./util/helpers'),
     auth = require('./util/auth'),
     processRequest = require('./controllers/process-request'),
-    slackController = require('./chat/slack/slackController');
+    slackController = require('./chat/slack/slackController'),
     bodyParser = require('body-parser');
 var app = module.exports = express();
 const { createMessageAdapter } = require('@slack/interactive-messages');
@@ -63,7 +63,7 @@ app.post('/api/approvalnotice', auth.authPost, processRequest.approvalNotice);
 app.use('/slack/actions', slackInteractions.expressMiddleware());
 
 // Slack interactive message handlers
-slackInteractions.action('action_slack_click_approve', (payload, respond) => {
+slackInteractions.action(/action_slack_click_approve_id_(\w+)/, (payload, respond) => {
     slackController.actionApprove(payload, respond);
     // Before the work completes, return a message object that is the same as the original but with
     // the interactive elements removed.
