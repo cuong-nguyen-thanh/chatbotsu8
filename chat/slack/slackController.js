@@ -93,29 +93,29 @@ function actionApprove(payload, respond) {
 function checkBot() {
     //Get info bot
     webClient.users.list().then((res) => {
-        bot = res.members.find(user => user.name === 'botndt');
+        bot = res.members.find(user => user.name === config.infoWorkSpace.slack_botName);
         if(bot) {
             // Check bot exist in channel
             webClient.channels.list().then((res) => {
             var findChannel = false;
                 for(var i = 0; i < res.channels.length; i++) {
                     var c = res.channels[i];
-                    if(c.name === 'testchannel') {
+                    if(c.name === config.infoWorkSpace.slack_channel) {
                         var membersArray = c.members;
                         var botIdFinded = membersArray.find(userId => userId === bot.id);
                         if(!botIdFinded) {
-                            console.log('bot [botndt] not in channel [testchannel]');
+                            console.log('bot '+config.infoWorkSpace.slack_botName+' not in channel '+config.infoWorkSpace.slack_channel);
                         }
                         findChannel = true;
                         break;
                     }
                 }
                 if(!findChannel) {
-                    console.log('channel [testchannel] not exist in Team');
+                    console.log('channel '+config.infoWorkSpace.slack_channel+' not exist in Team');
                 }
             }).catch(console.error);
         } else {
-            console.log('bot [botndt] not exist in Team');
+            console.log('bot '+config.infoWorkSpace.slack_botName+' not exist in Team');
         }
     }).catch(console.error);
 }

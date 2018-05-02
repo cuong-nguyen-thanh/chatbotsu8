@@ -25,5 +25,9 @@
     {"wf":"userId1","slack":"UAES4SYHM","chatwork":"userId1","description":"taind251219892"},
     {"wf":"userId2","slack":"UADUCDT37","chatwork":"userId2","description":"taind04175"},
     {"wf":"userId3","slack":"userId3","chatwork":"userId3","description":"user3"}
-  ]
+  ],
+  "infoWorkSpace": {
+    "slack_botName": "botndt",
+    "slack_channel": "testchannel"
+  }
 }
