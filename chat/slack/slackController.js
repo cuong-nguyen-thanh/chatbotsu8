@@ -135,22 +135,23 @@ function sendMsg(userId, msg, callback) {
 };
 
 function sendMsgWithAttach(data, callback) {
-    let userApprove = helpers.mappingUser(data.appReq, data.userIdApprove);
-    let userRequest = helpers.mappingUser(data.appReq, data.userIdReq);
+    let userApprove = helpers.mappingUser(data.app_id, data.approverId);
+    let userRequest = helpers.mappingUser(data.app_id, data.employee_external_code);
+    let imgUrl = data.setting_value_list[3].values[0];
     webClient.im.open({user:userApprove.slack}, function(err, resp) {
         if(!err) {
             async.waterfall([
                 function (callback) {
-                    var check = helpers.checkUrl(data.imgUrl, function(exists) {
+                    var check = helpers.checkUrl(imgUrl, function(exists) {
                          callback(exists);
                     });
                 }
               ], function (exists) {
                 var msgPost;
                 if(exists) {
-                    msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest.slack);
+                    msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest);
                 } else {
-                    msgPost = genMsg.genMsgNotImgApprove(data, resp.channel.id, userRequest.slack);
+                    msgPost = genMsg.genMsgNotImgApprove(data, resp.channel.id, userRequest);
                 }
                 webClient.chat.postMessage(msgPost, function(err, resp) {
                     callback(err);

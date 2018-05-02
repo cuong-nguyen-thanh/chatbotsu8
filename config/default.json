@@ -5,7 +5,7 @@
   "port": 5000,
   "botUserOAuthAccessToken": "xoxb-354423818581-wf2lroHlq6MQF4lf325EbcMf",
   "verificationToken": "zl8nrpn2QaD9z9ej9DnotNJY",
-  "appType": {"wf":0},
+  "appType": {"wf":"kintai"},
   "chatType": {"slack":0, "chatwork":1},
   "logging": {
     "console": {
@@ -22,9 +22,9 @@
     }
   },
   "mappingUser": [
-    {"wf":"userId1","slack":"UAES4SYHM","chatwork":"userId1","description":"taind251219892"},
-    {"wf":"userId2","slack":"UADUCDT37","chatwork":"userId2","description":"taind04175"},
-    {"wf":"userId3","slack":"userId3","chatwork":"userId3","description":"user3"}
+    {"wf":"userId1","slack":"UAES4SYHM","chatwork":"userId1","username":"taind1"},
+    {"wf":"userId2","slack":"UADUCDT37","chatwork":"userId2","username":"taind2"},
+    {"wf":"userId3","slack":"userId3","chatwork":"userId3","username":"user3"}
   ],
   "infoWorkSpace": {
     "slack_botName": "botndt",
