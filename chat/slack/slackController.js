@@ -2,8 +2,10 @@ var config = require('config'),
     async = require('async'),
     apiHandle = require('./../../util/apiHandle'),
     helpers = require('./../../util/helpers'),
+    SlackModel = require('./../../model/SlackModel'),
     dateFormat = require('dateformat'),
     genMsg = require('./../../util/genMsg');
+var HashMap = require('hashmap');
 
 exports.sendMsgWithAttach = sendMsgWithAttach;
 exports.sendMsg = sendMsg;
@@ -15,10 +17,12 @@ exports.handleReviceMsg = handleReviceMsg;
 let webClient = null;
 let rtmClient = null;
 let bot = null;
+var mapSlack = null;
 
 function init(web, rtm) {
     webClient = web;
     rtmClient = rtm;
+    mapSlack = new HashMap();
 }
 
 function handleReviceMsg(message) {
@@ -63,28 +67,36 @@ function actionApprove(payload, respond) {
         } 
 
         // Call api change status WF
-        var userApprove = helpers.mappingUser(config.appType.slack, payload.user.id);
+        // Get data req
+        var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
+        var mapData = mapSlack.get(idUnique);
+
+        // Gen token for api
         var today = new Date();
         var dateFm = dateFormat(today, "yyyymmddHHMM");
-        var plainData = 'API_WORKFLOW_KEY#tenant01#' + dateFm;
+        var plainData = 'API_WORKFLOW_KEY#' +mapData.tenant_id+ '#' + dateFm;
         var token = helpers.genToken('kintai_encrypt01', 'visappworkflow01', plainData);
-        var application_id = payload.callback_id.substring("action_slack_click_approve_id_".length);
-        console.log(application_id);
+
+        // Create json data
         var jsonData = {
             "action_id":action_id,
             "application_list":[
                 {
-                "application_id":application_id,
+                "application_id":mapData.application_id,
                 "comment":"comment",
                 "update_time":"2018-03-19 12:05:16"
                 }
             ]
         };
+
+        // create url
         var url = config.urlWf + '/api/ext/applications/status?access_token=' +
             token +'&employee_external_code=' +
-            userApprove.wf +'&app_id=kintai&tenant_id=tenant01_ext';
+            mapData.approverId +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
         console.log(jsonData);
         console.log(url);
+
+        // call WF
         apiHandle.postApi(jsonData, url, function(err, res, body) {
             if (res && (res.statusCode === 200 || res.statusCode === 201)) {
                 // Send msg to user approve
@@ -95,6 +107,7 @@ function actionApprove(payload, respond) {
                 });
             } else {
                 console.log(err);
+                respond({ text: 'Error access to ' +  config.urlWf});
             }
         });
         
@@ -109,7 +122,7 @@ function actionApprove(payload, respond) {
 }
 
 function checkBot() {
-    //Get info bot
+    // Get info bot
     webClient.users.list().then((res) => {
         bot = res.members.find(user => user.name === config.infoWorkSpace.slack_botName);
         if(bot) {
@@ -156,6 +169,7 @@ function sendMsgWithAttach(data, callback) {
     let userApprove = helpers.mappingUser(data.app_id, data.approverId);
     let userRequest = helpers.mappingUser(data.app_id, data.employee_external_code);
     let imgUrl = data.setting_value_list[3].values[0];
+    let idUnique = helpers.genUniqueId();
     webClient.im.open({user:userApprove.slack}, function(err, resp) {
         if(!err) {
             async.waterfall([
@@ -165,13 +179,20 @@ function sendMsgWithAttach(data, callback) {
                     });
                 }
               ], function (exists) {
-                var msgPost;
+                var msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest);
                 if(exists) {
-                    msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest);
-                } else {
-                    msgPost = genMsg.genMsgNotImgApprove(data, resp.channel.id, userRequest);
-                }
+                    msgPost.attachments.push(genMsg.genElementImage(imgUrl));
+                } 
+                msgPost.attachments.push(genMsg.genFtMsg(userRequest, idUnique));
                 webClient.chat.postMessage(msgPost, function(err, resp) {
+                    if(!err) {
+                        // Set data to HashMap
+                        var slackObj = new SlackModel(data.application_id, 
+                            data.employee_external_code, 
+                            data.approverId, data.application_form_id, 
+                            data.app_id, data.tenant_id);
+                        mapSlack.set(idUnique, slackObj);
+                    }
                     callback(err);
                 });
               });

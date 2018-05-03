@@ -20,6 +20,7 @@
     "eslint": "^4.19.1",
     "express": "=4.12.3",
     "express-session": ">=1.11.1",
+    "hashmap": "^2.3.0",
     "request": "^2.85.0",
     "url-exists": "^1.0.3"
   }

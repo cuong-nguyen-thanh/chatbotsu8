@@ -7,6 +7,12 @@ exports.checkUrl = checkUrl;
 exports.returnFistTimeMsg = returnFistTimeMsg;
 exports.resolveLater = resolveLater;
 exports.genToken = genToken;
+exports.genUniqueId = genUniqueId;
+
+function genUniqueId() {
+    var id = crypto.randomBytes(16).toString("hex");
+    return id;
+}
 
 function genToken(cryptKey, crpytIv, plainData) {
     var encipher = crypto.createCipheriv('aes-128-cbc', cryptKey, crpytIv),
@@ -27,12 +33,21 @@ function returnFistTimeMsg(payload) {
     for(var i = 0; i < reply.attachments.length; i++) {
         if(reply.attachments[i].callback_id) {
             delete reply.attachments[i];
+            reply.attachments.push(
+                {
+                    "title": "Processing...",
+                    "color": "#ccff00",
+                }
+            );
         }
     }
     return reply;
 }
 
 function checkUrl(url, callback) {
+    callback(false);
+    // This phase not applied image
+    /*
     urlExists(url, function(err, exists) {
         if(err) {
             callback(false);
@@ -40,6 +55,7 @@ function checkUrl(url, callback) {
             callback(exists);
         }
     });
+    */
 }
 
 function mappingUser(type, userId) {
