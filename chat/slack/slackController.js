@@ -70,6 +70,7 @@ function actionApprove(payload, respond) {
         // Get data req
         var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
         var mapData = mapSlack.get(idUnique);
+		mapSlack.delete(idUnique);
 
         // Gen token for api
         var today = new Date();
