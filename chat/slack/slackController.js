@@ -51,6 +51,8 @@ function handleReviceMsg(message) {
 }
 
 function actionApprove(payload, respond) {
+    console.log(payload);
+    console.log(JSON.stringify(mapSlack));
     helpers.resolveLater(50)
     .then(() => {
         let msgConfirmation;
@@ -192,6 +194,10 @@ function sendMsgWithAttach(data, callback) {
                             msgPost.attachments.push(genMsg.genElementImage(imgUrl));
                         } 
                         msgPost.attachments.push(genMsg.genFtMsg(userRequest, idUnique));
+                        msgPost.data = new SlackModel(data.ApplicationId, 
+                            data.RequesterId, 
+                            data.ApproverIds, data.Subject, 
+                            data.AppID, data.TenantId);
                         webClient.chat.postMessage(msgPost, function(err, resp) {
                             if(!err) {
                                 // Set data to HashMap
@@ -200,6 +206,7 @@ function sendMsgWithAttach(data, callback) {
                                     data.ApproverIds, data.Subject, 
                                     data.AppID, data.TenantId);
                                 mapSlack.set(idUnique, slackObj);
+                                console.log(mapSlack);
                             }
                             callback(err);
                         });
