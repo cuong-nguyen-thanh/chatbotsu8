@@ -47,6 +47,11 @@ app.get('/', auth.authGet, function (req, res) {
 	res.send('hello, i am a bot');
 });
 
+app.post('/log', auth.authPost, function (req, res) {
+    console.log(req.body);
+	res.json({});
+});
+
 // For test post method
 app.post('/testpost', auth.authPost, function (req, res) {
     console.log(req.body);

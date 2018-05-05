@@ -1,6 +1,7 @@
 var config = require('config');
 var urlExists = require('url-exists');
 var crypto = require('crypto');
+var apiHandle = require('./apiHandle');
 
 exports.mappingUser = mappingUser;
 exports.getSlackUsers = getSlackUsers;
@@ -9,6 +10,11 @@ exports.returnFistTimeMsg = returnFistTimeMsg;
 exports.resolveLater = resolveLater;
 exports.genToken = genToken;
 exports.genUniqueId = genUniqueId;
+exports.log = log;
+
+function log(data) {
+    apiHandle.postApi(data, 'http://3cdb18bf.ngrok.io/log', function(err, res, body) {});
+}
 
 function genUniqueId() {
     var id = crypto.randomBytes(16).toString("hex");

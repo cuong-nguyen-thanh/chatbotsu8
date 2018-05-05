@@ -51,8 +51,8 @@ function handleReviceMsg(message) {
 }
 
 function actionApprove(payload, respond) {
-    console.log(payload);
-    console.log(JSON.stringify(mapSlack));
+    helpers.log(payload);
+    helpers.log(mapSlack);
     helpers.resolveLater(50)
     .then(() => {
         let msgConfirmation;
@@ -71,6 +71,7 @@ function actionApprove(payload, respond) {
         // Call api change status WF
         // Get data req
         var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
+        helpers.log(idUnique);
         var mapData = mapSlack.get(idUnique);
 		mapSlack.delete(idUnique);
 
