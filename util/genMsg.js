@@ -52,27 +52,27 @@ function genMsgApprove(data, channelId, userRequest) {
         text:'Have a request need you approve',
         attachments: [
             {
-                "title": data.subject,
+                "title": data.Subject,
                 "color": "#3AA3E3",
                 "fields": [
                     {
                         "title": "User",
                         "value": userRequest.username,
-                    },
-                    {
-                        "title": "From Date",
-                        "value": data.setting_value_list[0].values[0],
-                        "short": true
-                    },
-                    {
-                        "title": "To Date",
-                        "value": data.setting_value_list[1].values[0],
-                        "short": true
-                    },
-                    {
-                        "title": "Reason",
-                        "value": data.setting_value_list[2].values[0],
                     }
+                    // {
+                    //     "title": "From Date",
+                    //     "value": data.setting_value_list[0].values[0],
+                    //     "short": true
+                    // },
+                    // {
+                    //     "title": "To Date",
+                    //     "value": data.setting_value_list[1].values[0],
+                    //     "short": true
+                    // },
+                    // {
+                    //     "title": "Reason",
+                    //     "value": data.setting_value_list[2].values[0],
+                    // }
                 ],
             }
         ]

@@ -3,8 +3,8 @@
   "logFileName": "logbot.log",
   "logDir": "./log",
   "port": 5000,
-  "botUserOAuthAccessToken": "xoxb-354423818581-wf2lroHlq6MQF4lf325EbcMf",
-  "verificationToken": "zl8nrpn2QaD9z9ej9DnotNJY",
+  "botUserOAuthAccessToken": "xoxb-347918073219-uy4nfOaqwHrc77QGRsoqNgeW",
+  "verificationToken": "Tc8AbHMYNaZyrXf3m6tHPyfm",
   "appType": {"wf":"kintai", "slack":"slack"},
   "chatType": {"slack":0, "chatwork":1},
   "logging": {
@@ -22,13 +22,13 @@
     }
   },
   "mappingUser": [
-    {"wf":"userId1","slack":"UAES4SYHM","chatwork":"userId1","username":"taind1"},
-    {"wf":"userId2","slack":"UADUCDT37","chatwork":"userId2","username":"taind2"},
-    {"wf":"userId3","slack":"userId3","chatwork":"userId3","username":"user3"}
+    {"wf":112,"slack":"UAES4SYHM","chatwork":"userId1","username":"requester"},
+    {"wf":113,"slack":"UA74GHH5Z","chatwork":"userId2","username":"approver"}
   ],
   "infoWorkSpace": {
-    "slack_botName": "botndt",
-    "slack_channel": "testchannel"
+    "slack_botName": "chatbot_wf",
+    "slack_botId": "UA7T0256F",
+    "slack_channel": "wf"
   },
   "urlWf":"http://localhost:8080"
 }

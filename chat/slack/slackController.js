@@ -125,7 +125,7 @@ function actionApprove(payload, respond) {
 function checkBot() {
     // Get info bot
     webClient.users.list().then((res) => {
-        bot = res.members.find(user => user.name === config.infoWorkSpace.slack_botName);
+        bot = res.members.find(user => user.id === config.infoWorkSpace.slack_botId);
         if(bot) {
             // Check bot exist in channel
             webClient.channels.list().then((res) => {
@@ -167,38 +167,45 @@ function sendMsg(userId, msg, callback) {
 };
 
 function sendMsgWithAttach(data, callback) {
-    let userApprove = helpers.mappingUser(data.app_id, data.approverId);
-    let userRequest = helpers.mappingUser(data.app_id, data.employee_external_code);
-    let imgUrl = data.setting_value_list[3].values[0];
+    console.log("data request: " + JSON.stringify(data));
+    let userApproves = helpers.getSlackUsers(data.AppID, data.ApproverIds);
+    let userRequest = helpers.mappingUser(data.AppID, data.RequesterId);
+    let imgUrl = '';//data.SettingValueList[3].values[0];
     let idUnique = helpers.genUniqueId();
-    webClient.im.open({user:userApprove.slack}, function(err, resp) {
-        if(!err) {
-            async.waterfall([
-                function (callback) {
-                    var check = helpers.checkUrl(imgUrl, function(exists) {
-                         callback(exists);
+    if (userApproves.length === 0) {
+        callback(true);
+    } else {
+        userApproves.forEach(userApprove => {
+            webClient.im.open({user:userApprove.slack}, function(err, resp) {
+                if(!err) {
+                    async.waterfall([
+                        function (imgCallback) {
+                            var check = helpers.checkUrl(imgUrl, function(exists) {
+                                imgCallback(exists);
+                            });
+                        }
+                    ], function (exists) {
+                        var msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest);
+                        if(exists) {
+                            msgPost.attachments.push(genMsg.genElementImage(imgUrl));
+                        } 
+                        msgPost.attachments.push(genMsg.genFtMsg(userRequest, idUnique));
+                        webClient.chat.postMessage(msgPost, function(err, resp) {
+                            if(!err) {
+                                // Set data to HashMap
+                                var slackObj = new SlackModel(data.ApplicationId, 
+                                    data.RequesterId, 
+                                    data.ApproverIds, data.Subject, 
+                                    data.AppID, data.TenantId);
+                                mapSlack.set(idUnique, slackObj);
+                            }
+                            callback(err);
+                        });
                     });
-                }
-              ], function (exists) {
-                var msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest);
-                if(exists) {
-                    msgPost.attachments.push(genMsg.genElementImage(imgUrl));
-                } 
-                msgPost.attachments.push(genMsg.genFtMsg(userRequest, idUnique));
-                webClient.chat.postMessage(msgPost, function(err, resp) {
-                    if(!err) {
-                        // Set data to HashMap
-                        var slackObj = new SlackModel(data.application_id, 
-                            data.employee_external_code, 
-                            data.approverId, data.application_form_id, 
-                            data.app_id, data.tenant_id);
-                        mapSlack.set(idUnique, slackObj);
-                    }
+                } else {
                     callback(err);
-                });
-              });
-        } else {
-            callback(err);
-        }
-    });
+                }
+            });
+        });
+    }
 };

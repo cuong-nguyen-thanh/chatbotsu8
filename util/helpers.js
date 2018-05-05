@@ -3,6 +3,7 @@ var urlExists = require('url-exists');
 var crypto = require('crypto');
 
 exports.mappingUser = mappingUser;
+exports.getSlackUsers = getSlackUsers;
 exports.checkUrl = checkUrl;
 exports.returnFistTimeMsg = returnFistTimeMsg;
 exports.resolveLater = resolveLater;
@@ -69,6 +70,20 @@ function mappingUser(type, userId) {
             break;
     }
     return userIdFinded;
+}
+
+function getSlackUsers(appID, wfUserIds) {
+    const userIdFounds = [];
+    if (wfUserIds) {
+        wfUserIds.forEach(id => {
+            const wfUserId = findUserByWfId(id);
+            if (wfUserId) {
+                userIdFounds.push(wfUserId);
+            }
+        });
+    }
+
+    return userIdFounds;
 }
 
 function findUserByWfId(userId) {
