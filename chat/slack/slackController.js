@@ -78,6 +78,8 @@ function actionApprove(payload, respond) {
         var plainData = 'API_WORKFLOW_KEY#' +mapData.tenant_id+ '#' + dateFm;
         var token = helpers.genToken('kintai_encrypt01', 'visappworkflow01', plainData);
 
+        mapSlack.set(idUnique, slackObj);
+
         // Create json data
         var jsonData = {
             "action_id":action_id,
@@ -93,7 +95,7 @@ function actionApprove(payload, respond) {
         // create url
         var url = config.urlWf + '/api/ext/applications/status?access_token=' +
             token +'&employee_external_code=' +
-            mapData.approverId +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
+            mapData.approver_id +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
         console.log(jsonData);
         console.log(url);
 
