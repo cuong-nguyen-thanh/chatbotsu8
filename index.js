@@ -57,7 +57,7 @@ app.post('/testpost', auth.authPost, function (req, res) {
 });
 
 // Revice approval notice
-app.post('/api/approvalnotice', auth.authPost, processRequest.approvalNotice);
+app.post('/webhook/wf/approve', auth.authPost, processRequest.approvalNotice);
 
 // Attach the adapter to the Express application as a middleware
 app.use('/slack/actions', slackInteractions.expressMiddleware());
