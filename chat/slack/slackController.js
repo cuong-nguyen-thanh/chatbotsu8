@@ -70,8 +70,8 @@ function actionApprove(payload, respond) {
         msgRespond = `Your request ${mapData.application_id} has been approved.`;
         action_id = "3";
       } else {
-        msgConfirmation = 'You have rejected.';
-        msgRespond = 'Your request has been rejected.';
+        msgConfirmation = `Request ${mapData.application_id} has been rejected by you.`;
+        msgRespond = `Your request ${mapData.application_id} has been rejected.`;
         action_id = "4";
       }
 
@@ -205,7 +205,7 @@ function sendMsgWithAttach(data, callback) {
                             });
                         }
                     ], function (exists) {
-                        var msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest);
+                        var msgPost = genMsg.genMsgApprove(data, resp.channel.id, userRequest, userApprove.slack);
                         if(exists) {
                             msgPost.attachments.push(genMsg.genElementImage(imgUrl));
                         } 

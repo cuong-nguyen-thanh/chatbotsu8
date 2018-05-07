@@ -46,10 +46,10 @@ function genElementImage(urlImage) {
     }
 }
 
-function genMsgApprove(data, channelId, userRequest) {
+function genMsgApprove(data, channelId, userRequest, userApprove) {
       var msgPost = {
         channel:channelId, 
-        text: `You have a new request(${data.ApplicationId}) need to approve.`,
+        text: `@${userApprove} You have a new request(${data.ApplicationId}) need to approve.`,
         attachments: [
             {
                 "title": data.Subject,
