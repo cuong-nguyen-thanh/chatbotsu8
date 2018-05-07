@@ -51,7 +51,6 @@ function handleReviceMsg(message) {
 }
 
 function actionApprove(payload, respond) {
-    helpers.log(payload);
     helpers.log(mapSlack);
     helpers.resolveLater(50)
     .then(() => {
@@ -73,7 +72,9 @@ function actionApprove(payload, respond) {
         var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
         helpers.log(idUnique);
         var mapData = mapSlack.get(idUnique);
-		mapSlack.delete(idUnique);
+        helpers.log('data');
+        helpers.log(mapData);
+		    mapSlack.delete(idUnique);
 
         // Gen token for api
         var today = new Date();
