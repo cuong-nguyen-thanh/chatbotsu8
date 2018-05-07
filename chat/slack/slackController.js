@@ -95,8 +95,7 @@ function actionApprove(payload, respond) {
       helpers.log(jsonData);
       // create url
       var url = config.urlWf + '/api/ext/applications/status?access_token=' +
-          token +'&employee_external_code=' +
-          mapData.approver_id +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
+          token +'&employee_external_code=approver&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
       helpers.log(url);
       // call WF
       apiHandle.postApi(jsonData, url, function(err, res, body) {
