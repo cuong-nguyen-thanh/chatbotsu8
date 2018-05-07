@@ -13,7 +13,7 @@ class SlackModel {
     get employee_external_code() {
         return this._employee_external_code;
     }
-    get approverId() {
+    get approver_id() {
     return this._approverId;
     }
     get application_form_id() {

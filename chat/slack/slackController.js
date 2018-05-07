@@ -69,15 +69,9 @@ function actionApprove(payload, respond) {
         // Call api change status WF
         // Get data req
         var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
-        helpers.log(idUnique);
         var mapData = mapSlack.get(idUnique);
-        helpers.log(mapData);
-      helpers.log('data');
 		    mapSlack.delete(idUnique);
-        helpers.log(mapData.tenant_id);
-        helpers.log(mapData.application_id);
-        helpers.log(mapData.app_id);
-        helpers.log(mapData.approver_id);
+        helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}`);
         // Gen token for api
         var today = new Date();
         var dateFm = dateFormat(today, "yyyymmddHHMM");
@@ -102,7 +96,7 @@ function actionApprove(payload, respond) {
         var url = config.urlWf + '/api/ext/applications/status?access_token=' +
             token +'&employee_external_code=' +
             mapData.approver_id +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
-
+      helpers.log(url);
         // call WF
         apiHandle.postApi(jsonData, url, function(err, res, body) {
             if (res && (res.statusCode === 200 || res.statusCode === 201)) {
@@ -196,10 +190,6 @@ function sendMsgWithAttach(data, callback) {
                             msgPost.attachments.push(genMsg.genElementImage(imgUrl));
                         } 
                         msgPost.attachments.push(genMsg.genFtMsg(userRequest, idUnique));
-                        msgPost.data = new SlackModel(data.ApplicationId, 
-                            data.RequesterId, 
-                            data.ApproverIds, data.Subject, 
-                            data.AppID, data.TenantId);
                         webClient.chat.postMessage(msgPost, function(err, resp) {
                             if(!err) {
                                 // Set data to HashMap
