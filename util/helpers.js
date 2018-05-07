@@ -13,7 +13,7 @@ exports.genUniqueId = genUniqueId;
 exports.log = log;
 
 function log(data) {
-    apiHandle.postApi(data, 'http://3cdb18bf.ngrok.io/log', function(err, res, body) {});
+    apiHandle.postApi(JSON.stringify(data), config.loggingURL, function(err, res, body) {});
 }
 
 function genUniqueId() {
