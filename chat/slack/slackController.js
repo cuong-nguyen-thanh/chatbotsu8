@@ -108,7 +108,7 @@ function actionApprove(payload, respond) {
               });
           } else {
               console.log(err);
-              respond({ text: 'Error access to ' +  url + ' data: ' + JSON.stringify(jsonData)});
+              respond({ text: 'Error access to ' +  url + ' data: ' + JSON.stringify(res)});
           }
       });
         

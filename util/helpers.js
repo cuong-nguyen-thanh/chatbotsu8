@@ -13,7 +13,7 @@ exports.genUniqueId = genUniqueId;
 exports.log = log;
 
 function log(data) {
-    apiHandle.postApi(JSON.stringify(data), config.loggingURL, function(err, res, body) {});
+    apiHandle.postLogApi(JSON.stringify(data), config.loggingURL, function(err, res, body) {});
 }
 
 function genUniqueId() {
