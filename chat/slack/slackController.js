@@ -56,15 +56,6 @@ function actionApprove(payload, respond) {
       let msgConfirmation;
       let msgRespond;
       let action_id;
-      if(payload.actions[0].value === 'accept') {
-          msgConfirmation = 'You have approved.';
-          msgRespond = 'Your request has been approved.';
-          action_id = "3";
-      } else {
-          msgConfirmation = 'You have rejected.';
-          msgRespond = 'Your request has been rejected.';
-          action_id = "4";
-      }
 
       // Call api change status WF
       // Get data req
@@ -72,6 +63,17 @@ function actionApprove(payload, respond) {
       var mapData = mapSlack.get(idUnique);
       mapSlack.delete(idUnique);
       helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}; ${mapData.update_time}`);
+
+      if(payload.actions[0].value === 'accept') {
+        msgConfirmation = 'You have approved.';
+        msgRespond = `Your request ${mapData.application_id}  has been approved successfully.`;
+        action_id = "3";
+      } else {
+        msgConfirmation = 'You have rejected.';
+        msgRespond = 'Your request has been rejected.';
+        action_id = "4";
+      }
+
       // Gen token for api
       var today = new Date();
       var updatedDate = new Date(mapData.update_time);
@@ -107,8 +109,7 @@ function actionApprove(payload, respond) {
                   console.log(err);
               });
           } else {
-              console.log(err);
-              respond({ text: 'Error access to ' +  url + ' data: ' + JSON.stringify(res)});
+              respond({ text: 'Error to access ' +  config.urlWf});
           }
       });
         

@@ -13,7 +13,7 @@ function genMsgSimple(msg, channelId) {
 
 function genFtMsg(userRequest, idUnique) {
     return {
-        "title": "You want approve?",
+        "title": "Do you want to approve?",
         "callback_id": "action_slack_click_approve_id_" + idUnique,
         "color": "#3AA3E3", 
         "attachment_type": "default",
@@ -49,14 +49,14 @@ function genElementImage(urlImage) {
 function genMsgApprove(data, channelId, userRequest) {
       var msgPost = {
         channel:channelId, 
-        text:'Have a request need you approve',
+        text:'Have a new request need you to approve.',
         attachments: [
             {
                 "title": data.Subject,
                 "color": "#3AA3E3",
                 "fields": [
                     {
-                        "title": "User",
+                        "title": "Created By",
                         "value": userRequest.username,
                     }
                     // {
