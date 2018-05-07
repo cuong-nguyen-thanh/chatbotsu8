@@ -155,11 +155,13 @@ function checkBot() {
 }
 
 function sendMsg(userId, msg, callback) {
+
   var chatworkParams = {
     chatworkToken: config.chatwork.access_token,
     roomId: config.chatwork.room_id,
     msg: msg
   };
+  helpers.log(chatworkParams);
 
   chatwork.init(chatworkParams);
 

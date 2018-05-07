@@ -7,7 +7,7 @@
   "verificationToken": "Tc8AbHMYNaZyrXf3m6tHPyfm",
   "appType": {"wf":"kintai", "slack":"slack"},
   "chatType": {"slack":0, "chatwork":1},
-  "loggingURL": "http://0f28a328.ngrok.io/log",
+  "loggingURL": "http://059b0968.ngrok.io/log",
   "logging": {
     "console": {
       "level": "info",
@@ -33,7 +33,7 @@
   },
   "urlWf":"http://m35wfappservicetest01.azurewebsites.net/",
   "chatwork": {
-    "access_token": "2122b2a850e105012c3891a45efffad3",
+    "access_token": "eecce65a5c91ca05c16a892120ff4601",
     "room_id": "105201199"
   }
 }
