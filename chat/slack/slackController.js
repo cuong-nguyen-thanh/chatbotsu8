@@ -51,7 +51,6 @@ function handleReviceMsg(message) {
 }
 
 function actionApprove(payload, respond) {
-    helpers.log(mapSlack);
     helpers.resolveLater(50)
     .then(() => {
         let msgConfirmation;
@@ -72,10 +71,13 @@ function actionApprove(payload, respond) {
         var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
         helpers.log(idUnique);
         var mapData = mapSlack.get(idUnique);
-        helpers.log('data');
         helpers.log(mapData);
+      helpers.log('data');
 		    mapSlack.delete(idUnique);
-
+        helpers.log(mapData.tenant_id);
+        helpers.log(mapData.application_id);
+        helpers.log(mapData.app_id);
+        helpers.log(mapData.approver_id);
         // Gen token for api
         var today = new Date();
         var dateFm = dateFormat(today, "yyyymmddHHMM");
@@ -100,8 +102,6 @@ function actionApprove(payload, respond) {
         var url = config.urlWf + '/api/ext/applications/status?access_token=' +
             token +'&employee_external_code=' +
             mapData.approver_id +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
-        console.log(jsonData);
-        console.log(url);
 
         // call WF
         apiHandle.postApi(jsonData, url, function(err, res, body) {
