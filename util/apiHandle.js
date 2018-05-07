@@ -9,7 +9,7 @@ function postApi(dataJson, url, callback) {
         headers: {
           'Content-Type': 'application/json'
         },
-        json: dataJson
+        json: {'text': dataJson}
     };
     request(options, function(err, res, body) {
         callback(err, res, body);
