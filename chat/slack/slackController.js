@@ -53,64 +53,63 @@ function handleReviceMsg(message) {
 function actionApprove(payload, respond) {
     helpers.resolveLater(50)
     .then(() => {
-        let msgConfirmation;
-        let msgRespond;
-        let action_id;
-        if(payload.actions[0].value === 'accept') {
-            msgConfirmation = 'You have approved.';
-            msgRespond = 'Your request has been approved.';
-            action_id = "3";
-        } else {
-            msgConfirmation = 'You have rejected.';
-            msgRespond = 'Your request has been rejected.';
-            action_id = "4";
-        } 
+      let msgConfirmation;
+      let msgRespond;
+      let action_id;
+      if(payload.actions[0].value === 'accept') {
+          msgConfirmation = 'You have approved.';
+          msgRespond = 'Your request has been approved.';
+          action_id = "3";
+      } else {
+          msgConfirmation = 'You have rejected.';
+          msgRespond = 'Your request has been rejected.';
+          action_id = "4";
+      }
 
-        // Call api change status WF
-        // Get data req
-        var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
-        var mapData = mapSlack.get(idUnique);
-		    mapSlack.delete(idUnique);
-        helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}`);
-        // Gen token for api
-        var today = new Date();
-        var dateFm = dateFormat(today, "yyyymmddHHMM");
-        var plainData = 'API_WORKFLOW_KEY#' +mapData.tenant_id+ '#' + dateFm;
-        var token = helpers.genToken('kintai_encrypt01', 'visappworkflow01', plainData);
+      // Call api change status WF
+      // Get data req
+      var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
+      var mapData = mapSlack.get(idUnique);
+      mapSlack.delete(idUnique);
+      helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}`);
+      // Gen token for api
+      var today = new Date();
+      var dateFm = dateFormat(today, "yyyymmddHHMM");
+      var updatedDate = dateFormat(today, "yyyy-MM-dd hh:mm:ss");
+      var plainData = 'API_WORKFLOW_KEY#' +mapData.tenant_id+ '#' + dateFm;
+      var token = helpers.genToken('kintai_encrypt01', 'visappworkflow01', plainData);
 
-        mapSlack.set(idUnique, slackObj);
-
-        // Create json data
-        var jsonData = {
-            "action_id":action_id,
-            "application_list":[
-                {
-                "application_id":mapData.application_id,
-                "comment":"comment",
-                "update_time":"2018-03-19 12:05:16"
-                }
-            ]
-        };
-
-        // create url
-        var url = config.urlWf + '/api/ext/applications/status?access_token=' +
-            token +'&employee_external_code=' +
-            mapData.approver_id +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
+      // Create json data
+      var jsonData = {
+          "action_id":action_id,
+          "application_list":[
+              {
+              "application_id":mapData.application_id,
+              "comment":"comment",
+              "update_time": updatedDate.toString()
+              }
+          ]
+      };
+      helpers.log(jsonData);
+      // create url
+      var url = config.urlWf + '/api/ext/applications/status?access_token=' +
+          token +'&employee_external_code=' +
+          mapData.approver_id +'&app_id=' + mapData.app_id + '&tenant_id=' + mapData.tenant_id;
       helpers.log(url);
-        // call WF
-        apiHandle.postApi(jsonData, url, function(err, res, body) {
-            if (res && (res.statusCode === 200 || res.statusCode === 201)) {
-                // Send msg to user approve
-                respond({ text: msgConfirmation });
-                // Send msg to user request
-                sendMsg(payload.actions[0].name, msgRespond, function(err){
-                    console.log(err);
-                });
-            } else {
-                console.log(err);
-                respond({ text: 'Error access to ' +  url + ' data: ' + JSON.stringify(jsonData)});
-            }
-        });
+      // call WF
+      apiHandle.postApi(jsonData, url, function(err, res, body) {
+          if (res && (res.statusCode === 200 || res.statusCode === 201)) {
+              // Send msg to user approve
+              respond({ text: msgConfirmation });
+              // Send msg to user request
+              sendMsg(payload.actions[0].name, msgRespond, function(err){
+                  console.log(err);
+              });
+          } else {
+              console.log(err);
+              respond({ text: 'Error access to ' +  url + ' data: ' + JSON.stringify(jsonData)});
+          }
+      });
         
     })
     .catch((error) => {
