@@ -65,8 +65,8 @@ function actionApprove(payload, respond) {
       helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}; ${mapData.update_time}`);
 
       if(payload.actions[0].value === 'accept') {
-        msgConfirmation = 'You have approved.';
-        msgRespond = `Your request ${mapData.application_id}  has been approved successfully.`;
+        msgConfirmation = `You approved request ${mapData.application_id} successfully.`;
+        msgRespond = `Your request ${mapData.application_id} has been approved successfully.`;
         action_id = "3";
       } else {
         msgConfirmation = 'You have rejected.';
@@ -154,17 +154,17 @@ function checkBot() {
 }
 
 function sendMsg(userId, msg, callback) {
-    webClient.im.open({user:userId}, function(err, resp) {
-        if(!err) {
-            var msgGen = genMsg.genMsgSimple(msg, resp.channel.id);
-            console.log(msgGen);
-            webClient.chat.postMessage(msgGen, function(err, resp) {
-                callback(err);
-            });
-        } else {
-            callback(err);
-        }
-    });
+    // webClient.im.open({user:userId}, function(err, resp) {
+    //     if(!err) {
+    //         var msgGen = genMsg.genMsgSimple(msg, resp.channel.id);
+    //         console.log(msgGen);
+    //         webClient.chat.postMessage(msgGen, function(err, resp) {
+    //             callback(err);
+    //         });
+    //     } else {
+    //         callback(err);
+    //     }
+    // });
 };
 
 function sendMsgWithAttach(data, callback) {

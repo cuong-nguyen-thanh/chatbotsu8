@@ -49,7 +49,7 @@ function genElementImage(urlImage) {
 function genMsgApprove(data, channelId, userRequest) {
       var msgPost = {
         channel:channelId, 
-        text:'Have a new request need you to approve.',
+        text:'You have a new request need to approve.',
         attachments: [
             {
                 "title": data.Subject,
