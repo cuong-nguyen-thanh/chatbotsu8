@@ -65,8 +65,8 @@ function actionApprove(payload, respond) {
       helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}; ${mapData.update_time}`);
 
       if(payload.actions[0].value === 'accept') {
-        msgConfirmation = `You approved request ${mapData.application_id} successfully.`;
-        msgRespond = `Your request ${mapData.application_id} has been approved successfully.`;
+        msgConfirmation = `Request ${mapData.application_id} has been approved by you.`;
+        msgRespond = `Your request ${mapData.application_id} has been approved.`;
         action_id = "3";
       } else {
         msgConfirmation = 'You have rejected.';
