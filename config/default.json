@@ -31,5 +31,9 @@
     "slack_botId": "UA7T0256F",
     "slack_channel": "wf"
   },
-  "urlWf":"http://m35wfappservicetest01.azurewebsites.net/"
+  "urlWf":"http://m35wfappservicetest01.azurewebsites.net/",
+  "chatwork": {
+    "access_token": "2122b2a850e105012c3891a45efffad3",
+    "room_id": "105099403"
+  }
 }

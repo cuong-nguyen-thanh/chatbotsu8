@@ -6,6 +6,7 @@ var config = require('config'),
     dateFormat = require('dateformat'),
     genMsg = require('./../../util/genMsg');
 var HashMap = require('hashmap');
+const chatwork = require('chatwork-client');
 
 exports.sendMsgWithAttach = sendMsgWithAttach;
 exports.sendMsg = sendMsg;
@@ -154,6 +155,22 @@ function checkBot() {
 }
 
 function sendMsg(userId, msg, callback) {
+  var chatworkParams = {
+    chatworkToken: config.chatwork.access_token,
+    roomId: config.chatwork.room_id,
+    msg: msg
+  };
+
+  chatwork.init(chatworkParams);
+
+  chatwork.postRoomMessages()
+    .then((data)=>{
+      console.log(data)
+    })
+    .catch((err)=>{
+      console.log(err);
+    });
+
     // webClient.im.open({user:userId}, function(err, resp) {
     //     if(!err) {
     //         var msgGen = genMsg.genMsgSimple(msg, resp.channel.id);
