@@ -74,8 +74,9 @@ function actionApprove(payload, respond) {
       helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}`);
       // Gen token for api
       var today = new Date();
-      var dateFm = dateFormat(today, "yyyymmddHHMM");
-      var updatedDate = dateFormat(today, "yyyy-MM-dd hh:mm:ss");
+      today.setHours(today.getHours() + 9); //GMT+9
+      var dateFm = dateFormat(today, "GMT:yyyymmddHHMM");
+      var updatedDate = dateFormat(today, "GMT:yyyy-mm-dd HH:MM:ss");
       var plainData = 'API_WORKFLOW_KEY#' +mapData.tenant_id+ '#' + dateFm;
       var token = helpers.genToken('kintai_encrypt01', 'visappworkflow01', plainData);
 
@@ -86,7 +87,7 @@ function actionApprove(payload, respond) {
               {
               "application_id":mapData.application_id,
               "comment":"comment",
-              "update_time": updatedDate.toString()
+              "update_time": updatedDate
               }
           ]
       };
