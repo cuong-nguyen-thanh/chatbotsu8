@@ -71,7 +71,7 @@ function actionApprove(payload, respond) {
       var idUnique = payload.callback_id.substring("action_slack_click_approve_id_".length);
       var mapData = mapSlack.get(idUnique);
       mapSlack.delete(idUnique);
-      helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}`);
+      helpers.log(`data: ${mapData.tenant_id}; ${mapData.application_id}; ${mapData.app_id}; ${mapData.approver_id}; ${mapData.update_time}`);
       // Gen token for api
       var today = new Date();
       today.setHours(today.getHours() + 9); //GMT+9
@@ -194,9 +194,12 @@ function sendMsgWithAttach(data, callback) {
                             if(!err) {
                                 // Set data to HashMap
                                 var slackObj = new SlackModel(data.ApplicationId, 
-                                    data.RequesterId, 
-                                    data.ApproverIds, data.Subject, 
-                                    data.AppID, data.TenantId);
+                                  data.RequesterId,
+                                  data.ApproverIds,
+                                  data.Subject,
+                                  data.AppID,
+                                  data.TenantId,
+                                  data.UpdateTime);
                                 mapSlack.set(idUnique, slackObj);
                                 console.log(mapSlack);
                             }
